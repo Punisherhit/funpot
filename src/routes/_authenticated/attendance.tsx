@@ -76,7 +76,7 @@ function AttendancePage() {
         </div>
       </Card>
 
-      {openSession && <MarkAttendanceDialog sessionId={openSession} branchId={(sessions ?? []).find((s: any) => s.id === openSession)?.branch_id} userId={user!.id} onClose={() => setOpenSession(null)} />}
+      {openSession && <MarkAttendanceDialog sessionId={openSession} branchId={(sessions ?? []).find((s: any) => s.id === openSession)?.branch_id ?? ""} userId={user!.id} onClose={() => setOpenSession(null)} />}
     </div>
   );
 }
