@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard, Users, Building2, ClipboardCheck, Award, Trophy,
-  Wallet, ShoppingBag, ScrollText, UserCog, LogOut, Menu, X
+  Wallet, ShoppingBag, ScrollText, UserCog, LogOut, Menu, X, ArrowRightLeft
 } from "lucide-react";
 import { useState } from "react";
 
