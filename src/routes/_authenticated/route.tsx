@@ -23,6 +23,7 @@ const NAV = [
   { to: "/athletes", label: "Athletes", icon: Users },
   { to: "/attendance", label: "Attendance", icon: ClipboardCheck },
   { to: "/assessments", label: "Assessments", icon: Award },
+  { to: "/transfers", label: "Transfers", icon: ArrowRightLeft },
   { to: "/competitions", label: "Competitions", icon: Trophy },
   { to: "/payments", label: "Payments", icon: Wallet },
   { to: "/merchandise", label: "Merchandise", icon: ShoppingBag },
