@@ -13,6 +13,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTransfersRouteImport } from './routes/_authenticated/transfers'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedMerchandiseRouteImport } from './routes/_authenticated/merchandise'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -44,6 +45,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTransfersRoute = AuthenticatedTransfersRouteImport.update({
+  id: '/transfers',
+  path: '/transfers',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
   id: '/payments',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/merchandise': typeof AuthenticatedMerchandiseRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/transfers': typeof AuthenticatedTransfersRoute
   '/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/athletes/': typeof AuthenticatedAthletesIndexRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/merchandise': typeof AuthenticatedMerchandiseRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/transfers': typeof AuthenticatedTransfersRoute
   '/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/athletes': typeof AuthenticatedAthletesIndexRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/merchandise': typeof AuthenticatedMerchandiseRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
+  '/_authenticated/transfers': typeof AuthenticatedTransfersRoute
   '/_authenticated/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/_authenticated/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/_authenticated/athletes/': typeof AuthenticatedAthletesIndexRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/merchandise'
     | '/payments'
+    | '/transfers'
     | '/athletes/$id'
     | '/athletes/new'
     | '/athletes/'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/merchandise'
     | '/payments'
+    | '/transfers'
     | '/athletes/$id'
     | '/athletes/new'
     | '/athletes'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/merchandise'
     | '/_authenticated/payments'
+    | '/_authenticated/transfers'
     | '/_authenticated/athletes/$id'
     | '/_authenticated/athletes/new'
     | '/_authenticated/athletes/'
@@ -255,6 +267,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/transfers': {
+      id: '/_authenticated/transfers'
+      path: '/transfers'
+      fullPath: '/transfers'
+      preLoaderRoute: typeof AuthenticatedTransfersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/payments': {
       id: '/_authenticated/payments'
@@ -353,6 +372,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMerchandiseRoute: typeof AuthenticatedMerchandiseRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
+  AuthenticatedTransfersRoute: typeof AuthenticatedTransfersRoute
   AuthenticatedAthletesIdRoute: typeof AuthenticatedAthletesIdRoute
   AuthenticatedAthletesNewRoute: typeof AuthenticatedAthletesNewRoute
   AuthenticatedAthletesIndexRoute: typeof AuthenticatedAthletesIndexRoute
@@ -368,6 +388,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMerchandiseRoute: AuthenticatedMerchandiseRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
+  AuthenticatedTransfersRoute: AuthenticatedTransfersRoute,
   AuthenticatedAthletesIdRoute: AuthenticatedAthletesIdRoute,
   AuthenticatedAthletesNewRoute: AuthenticatedAthletesNewRoute,
   AuthenticatedAthletesIndexRoute: AuthenticatedAthletesIndexRoute,

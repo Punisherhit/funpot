@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard, Users, Building2, ClipboardCheck, Award, Trophy,
-  Wallet, ShoppingBag, ScrollText, UserCog, LogOut, Menu, X
+  Wallet, ShoppingBag, ScrollText, UserCog, LogOut, Menu, X, ArrowRightLeft
 } from "lucide-react";
 import { useState } from "react";
 
@@ -23,6 +23,7 @@ const NAV = [
   { to: "/athletes", label: "Athletes", icon: Users },
   { to: "/attendance", label: "Attendance", icon: ClipboardCheck },
   { to: "/assessments", label: "Assessments", icon: Award },
+  { to: "/transfers", label: "Transfers", icon: ArrowRightLeft },
   { to: "/competitions", label: "Competitions", icon: Trophy },
   { to: "/payments", label: "Payments", icon: Wallet },
   { to: "/merchandise", label: "Merchandise", icon: ShoppingBag },
