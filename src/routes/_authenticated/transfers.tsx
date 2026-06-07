@@ -73,7 +73,7 @@ function AthleteTransfer({ userId }: { userId: string }) {
       const { data } = await supabase
         .from("athletes")
         .select("id, full_name, athlete_number, branch_id, branches(code, name)")
-        .eq("status", "active")
+        .eq("active", true)
         .order("full_name");
       return data ?? [];
     },
