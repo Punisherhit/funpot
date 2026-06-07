@@ -832,6 +832,7 @@ export type Database = {
     }
     Functions: {
       current_user_is_admin: { Args: never; Returns: boolean }
+      current_user_is_coach_or_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -841,6 +842,14 @@ export type Database = {
       }
       is_coach_of: {
         Args: { _branch_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_coach_of_athlete: {
+        Args: { _athlete_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_coach_of_session: {
+        Args: { _session_id: string; _user_id: string }
         Returns: boolean
       }
       next_athlete_number: { Args: { _branch_id: string }; Returns: string }
