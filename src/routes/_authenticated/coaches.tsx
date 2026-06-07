@@ -84,8 +84,35 @@ function CoachesPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Coaches</h1>
-        <p className="text-muted-foreground">Manage role-based access and branch assignments</p>
+        <p className="text-muted-foreground">Create coach accounts, assign branches, and manage access</p>
       </div>
+
+      <Card className="p-5">
+        <h2 className="font-semibold mb-3">Create coach account</h2>
+        <div className="grid sm:grid-cols-4 gap-3 items-end">
+          <div>
+            <Label>Full name</Label>
+            <Input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Jane Doe" />
+          </div>
+          <div>
+            <Label>Email</Label>
+            <Input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="coach@funpot.co.ke" />
+          </div>
+          <div>
+            <Label>Temporary password</Label>
+            <Input type="text" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="min 8 characters" />
+          </div>
+          <Button
+            onClick={() => createCoach.mutate()}
+            disabled={createCoach.isPending || !newName || !newEmail || newPassword.length < 8}
+          >
+            Create account
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          Share the temporary password with the coach. They can change it later via "Forgot password" on the sign-in page.
+        </p>
+      </Card>
 
       <Card className="p-5">
         <h2 className="font-semibold mb-3">Assign coach to branch</h2>
