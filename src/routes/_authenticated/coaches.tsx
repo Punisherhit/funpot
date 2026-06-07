@@ -22,6 +22,10 @@ function CoachesPage() {
   const qc = useQueryClient();
   const [assignUser, setAssignUser] = useState("");
   const [assignBranch, setAssignBranch] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const createFn = useServerFn(createCoachAccount);
 
   const { data: profiles } = useQuery({
     queryKey: ["profiles-all"],
