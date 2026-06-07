@@ -65,6 +65,19 @@ function CoachesPage() {
     onSuccess: () => { toast.success("Removed"); qc.invalidateQueries({ queryKey: ["branch-coaches"] }); },
   });
 
+  const createCoach = useMutation({
+    mutationFn: async () => {
+      return await createFn({ data: { email: newEmail, password: newPassword, fullName: newName } });
+    },
+    onSuccess: () => {
+      toast.success("Coach account created");
+      setNewName(""); setNewEmail(""); setNewPassword("");
+      qc.invalidateQueries({ queryKey: ["profiles-all"] });
+      qc.invalidateQueries({ queryKey: ["all-roles"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   if (!isAdmin) return <div className="text-muted-foreground">Admin only.</div>;
 
   return (
