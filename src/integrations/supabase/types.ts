@@ -546,6 +546,72 @@ export type Database = {
           },
         ]
       }
+      fee_invoices: {
+        Row: {
+          amount_due: number
+          amount_paid: number
+          athlete_id: string
+          branch_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string
+          id: string
+          kind: string
+          period_month: string | null
+          reminder_last_sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_due: number
+          amount_paid?: number
+          athlete_id: string
+          branch_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date: string
+          id?: string
+          kind?: string
+          period_month?: string | null
+          reminder_last_sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_due?: number
+          amount_paid?: number
+          athlete_id?: string
+          branch_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string
+          id?: string
+          kind?: string
+          period_month?: string | null
+          reminder_last_sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_invoices_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fee_invoices_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       merchandise: {
         Row: {
           active: boolean
@@ -757,6 +823,63 @@ export type Database = {
             columns: ["athlete_id"]
             isOneToOne: false
             referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_logs: {
+        Row: {
+          athlete_id: string | null
+          branch_id: string
+          channel: string
+          created_at: string
+          error: string | null
+          id: string
+          parent_email: string
+          sent_by: string | null
+          status: string
+          total_outstanding: number
+          trigger: string
+        }
+        Insert: {
+          athlete_id?: string | null
+          branch_id: string
+          channel?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          parent_email: string
+          sent_by?: string | null
+          status?: string
+          total_outstanding?: number
+          trigger?: string
+        }
+        Update: {
+          athlete_id?: string | null
+          branch_id?: string
+          channel?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          parent_email?: string
+          sent_by?: string | null
+          status?: string
+          total_outstanding?: number
+          trigger?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_logs_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminder_logs_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
             referencedColumns: ["id"]
           },
         ]

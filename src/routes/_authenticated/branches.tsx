@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { Plus, Building2 } from "lucide-react";
-import { useState } from "react";
+import { Plus, Building2, Users, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/branches")({
@@ -16,19 +16,43 @@ export const Route = createFileRoute("/_authenticated/branches")({
 });
 
 function BranchesPage() {
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", code: "", location: "" });
 
-  const { data: branches } = useQuery({
-    queryKey: ["branches"],
+  const { data: myBranches } = useQuery({
+    queryKey: ["my-branches", user?.id],
+    enabled: !!user?.id && !isAdmin,
     queryFn: async () => {
-      const { data, error } = await supabase.from("branches").select("*, athletes(count)").order("name");
+      const { data } = await supabase
+        .from("branch_coaches")
+        .select("branches(id, code, name, location, active)")
+        .eq("user_id", user!.id);
+      return (data ?? []).map((r: any) => r.branches).filter(Boolean);
+    },
+  });
+
+  const { data: allBranches } = useQuery({
+    queryKey: ["branches"],
+    enabled: isAdmin,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("branches")
+        .select("*, athletes(count)")
+        .order("name");
       if (error) throw error;
       return data ?? [];
     },
   });
+
+  // Coach with a single branch: auto-open it
+  useEffect(() => {
+    if (!isAdmin && myBranches && myBranches.length === 1) {
+      navigate({ to: "/branches/$code", params: { code: myBranches[0].code }, replace: true });
+    }
+  }, [isAdmin, myBranches, navigate]);
 
   const create = useMutation({
     mutationFn: async () => {
@@ -48,12 +72,16 @@ function BranchesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const list = isAdmin ? allBranches : myBranches;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Branches</h1>
-          <p className="text-muted-foreground">Manage club locations</p>
+          <p className="text-muted-foreground">
+            {isAdmin ? "All club locations — click to open." : "Your assigned branches."}
+          </p>
         </div>
         {isAdmin && (
           <Dialog open={open} onOpenChange={setOpen}>
@@ -71,24 +99,37 @@ function BranchesPage() {
         )}
       </div>
 
+      {(!list || list.length === 0) && (
+        <Card className="p-6 text-sm text-muted-foreground">
+          {isAdmin ? "No branches yet." : "You haven't been assigned to a branch yet. Ask a super admin."}
+        </Card>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(branches ?? []).map((b: any) => (
-          <Card key={b.id} className="p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs font-mono font-semibold text-accent tracking-wider">{b.code}</div>
-                <div className="mt-1 text-lg font-semibold">{b.name}</div>
-                <div className="text-sm text-muted-foreground">{b.location || "—"}</div>
+        {(list ?? []).map((b: any) => (
+          <Link key={b.id} to="/branches/$code" params={{ code: b.code }}>
+            <Card className="p-5 hover:border-accent transition-colors cursor-pointer h-full">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-xs font-mono font-semibold text-accent tracking-wider">{b.code}</div>
+                  <div className="mt-1 text-lg font-semibold">{b.name}</div>
+                  <div className="text-sm text-muted-foreground">{b.location || "—"}</div>
+                </div>
+                <Building2 className="h-5 w-5 text-muted-foreground" />
               </div>
-              <Building2 className="h-5 w-5 text-muted-foreground" />
-            </div>
-            <div className="mt-4 flex items-center gap-2 text-sm">
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
-                {b.athletes?.[0]?.count ?? 0} athletes
-              </span>
-              {b.active ? <span className="rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-medium text-success">Active</span> : null}
-            </div>
-          </Card>
+              <div className="mt-4 flex items-center justify-between gap-2 text-sm">
+                <div className="flex items-center gap-2">
+                  {b.athletes ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
+                      <Users className="h-3 w-3" /> {b.athletes?.[0]?.count ?? 0}
+                    </span>
+                  ) : null}
+                  {b.active ? <span className="rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-medium text-success">Active</span> : null}
+                </div>
+                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
