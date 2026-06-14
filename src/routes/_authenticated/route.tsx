@@ -20,6 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/branches", label: "Branches", icon: Building2 },
   { to: "/athletes", label: "Athletes", icon: Users },
   { to: "/attendance", label: "Attendance", icon: ClipboardCheck },
   { to: "/assessments", label: "Assessments", icon: Award },
@@ -30,7 +31,6 @@ const NAV = [
 ] as const;
 
 const ADMIN_NAV = [
-  { to: "/branches", label: "Branches", icon: Building2 },
   { to: "/coaches", label: "Coaches", icon: UserCog },
   { to: "/audit", label: "Audit Log", icon: ScrollText },
 ] as const;
