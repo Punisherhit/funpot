@@ -23,7 +23,6 @@ import { Route as AuthenticatedBranchesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedAssessmentsRouteImport } from './routes/_authenticated/assessments'
-import { Route as AuthenticatedBranchesIndexRouteImport } from './routes/_authenticated/branches.index'
 import { Route as AuthenticatedAthletesIndexRouteImport } from './routes/_authenticated/athletes.index'
 import { Route as AuthenticatedAthletesNewRouteImport } from './routes/_authenticated/athletes.new'
 import { Route as AuthenticatedAthletesIdRouteImport } from './routes/_authenticated/athletes.$id'
@@ -100,12 +99,6 @@ const AuthenticatedAssessmentsRoute =
     path: '/assessments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedBranchesIndexRoute =
-  AuthenticatedBranchesIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedBranchesRoute,
-  } as any)
 const AuthenticatedAthletesIndexRoute =
   AuthenticatedAthletesIndexRouteImport.update({
     id: '/athletes/',
@@ -131,7 +124,7 @@ export interface FileRoutesByFullPath {
   '/assessments': typeof AuthenticatedAssessmentsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/audit': typeof AuthenticatedAuditRoute
-  '/branches': typeof AuthenticatedBranchesRouteWithChildren
+  '/branches': typeof AuthenticatedBranchesRoute
   '/coaches': typeof AuthenticatedCoachesRoute
   '/competitions': typeof AuthenticatedCompetitionsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -141,7 +134,6 @@ export interface FileRoutesByFullPath {
   '/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/athletes/': typeof AuthenticatedAthletesIndexRoute
-  '/branches/': typeof AuthenticatedBranchesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +142,7 @@ export interface FileRoutesByTo {
   '/assessments': typeof AuthenticatedAssessmentsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/audit': typeof AuthenticatedAuditRoute
+  '/branches': typeof AuthenticatedBranchesRoute
   '/coaches': typeof AuthenticatedCoachesRoute
   '/competitions': typeof AuthenticatedCompetitionsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -159,7 +152,6 @@ export interface FileRoutesByTo {
   '/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/athletes': typeof AuthenticatedAthletesIndexRoute
-  '/branches': typeof AuthenticatedBranchesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,7 +162,7 @@ export interface FileRoutesById {
   '/_authenticated/assessments': typeof AuthenticatedAssessmentsRoute
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
-  '/_authenticated/branches': typeof AuthenticatedBranchesRouteWithChildren
+  '/_authenticated/branches': typeof AuthenticatedBranchesRoute
   '/_authenticated/coaches': typeof AuthenticatedCoachesRoute
   '/_authenticated/competitions': typeof AuthenticatedCompetitionsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -180,7 +172,6 @@ export interface FileRoutesById {
   '/_authenticated/athletes/$id': typeof AuthenticatedAthletesIdRoute
   '/_authenticated/athletes/new': typeof AuthenticatedAthletesNewRoute
   '/_authenticated/athletes/': typeof AuthenticatedAthletesIndexRoute
-  '/_authenticated/branches/': typeof AuthenticatedBranchesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,7 +192,6 @@ export interface FileRouteTypes {
     | '/athletes/$id'
     | '/athletes/new'
     | '/athletes/'
-    | '/branches/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +200,7 @@ export interface FileRouteTypes {
     | '/assessments'
     | '/attendance'
     | '/audit'
+    | '/branches'
     | '/coaches'
     | '/competitions'
     | '/dashboard'
@@ -219,7 +210,6 @@ export interface FileRouteTypes {
     | '/athletes/$id'
     | '/athletes/new'
     | '/athletes'
-    | '/branches'
   id:
     | '__root__'
     | '/'
@@ -239,7 +229,6 @@ export interface FileRouteTypes {
     | '/_authenticated/athletes/$id'
     | '/_authenticated/athletes/new'
     | '/_authenticated/athletes/'
-    | '/_authenticated/branches/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -349,13 +338,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssessmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/branches/': {
-      id: '/_authenticated/branches/'
-      path: '/'
-      fullPath: '/branches/'
-      preLoaderRoute: typeof AuthenticatedBranchesIndexRouteImport
-      parentRoute: typeof AuthenticatedBranchesRoute
-    }
     '/_authenticated/athletes/': {
       id: '/_authenticated/athletes/'
       path: '/athletes'
@@ -380,24 +362,11 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedBranchesRouteChildren {
-  AuthenticatedBranchesIndexRoute: typeof AuthenticatedBranchesIndexRoute
-}
-
-const AuthenticatedBranchesRouteChildren: AuthenticatedBranchesRouteChildren = {
-  AuthenticatedBranchesIndexRoute: AuthenticatedBranchesIndexRoute,
-}
-
-const AuthenticatedBranchesRouteWithChildren =
-  AuthenticatedBranchesRoute._addFileChildren(
-    AuthenticatedBranchesRouteChildren,
-  )
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAssessmentsRoute: typeof AuthenticatedAssessmentsRoute
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
-  AuthenticatedBranchesRoute: typeof AuthenticatedBranchesRouteWithChildren
+  AuthenticatedBranchesRoute: typeof AuthenticatedBranchesRoute
   AuthenticatedCoachesRoute: typeof AuthenticatedCoachesRoute
   AuthenticatedCompetitionsRoute: typeof AuthenticatedCompetitionsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -413,7 +382,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAssessmentsRoute: AuthenticatedAssessmentsRoute,
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
-  AuthenticatedBranchesRoute: AuthenticatedBranchesRouteWithChildren,
+  AuthenticatedBranchesRoute: AuthenticatedBranchesRoute,
   AuthenticatedCoachesRoute: AuthenticatedCoachesRoute,
   AuthenticatedCompetitionsRoute: AuthenticatedCompetitionsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
